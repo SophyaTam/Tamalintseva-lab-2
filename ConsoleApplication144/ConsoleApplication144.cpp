@@ -9,7 +9,6 @@
 #define M 200
 
 struct {
-    char Entranse[100] = "Выберите направленность видео: \n";
     char AvailableOptions[N - 1][M - 1];
 }MainMenu[N][M];
 void AddOptions(char AvailableOptions[N][M]) {
@@ -57,6 +56,7 @@ int ChooseOptions() {
 }
 struct {
     int Loud;
+    char Colour[10];
 }Voice;
 void VidVoice() {
     int Loud = 0;

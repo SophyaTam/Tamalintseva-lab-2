@@ -186,7 +186,7 @@ int StopVids() {
     int StopVid = 0;
     scanf("%d", &StopVid);
     if (StopVid == 1) {
-        puts("Видео остановлена");
+        puts("Видео остановлено");
     }
     return StopVid;
 }
@@ -196,7 +196,7 @@ void OnVid() {
     int VidPlayerOn = 0;
 
     while (1) {
-        StopVid = StopAdvs();
+        StopVid = StopVids();
 
         if (StopVid == 0) {
             puts("Вы выбрали продолжить.");

@@ -62,9 +62,20 @@ struct {
 }Voice;
 void VidVoice() {
     int Loud = 0;
-    puts("Введите уровень громкости");
-    scanf("%d", &Loud);
-    printf("Уровень громкости видео изменен до %d\n", Loud);
+    do {
+        printf("Введите уровень громкости (от 0 до 100): ");
+        if (scanf("%d", &Loud) != 1) {
+            printf("Ошибка: введите числовое значение.\n");
+            while (getchar() != '\n'); 
+            Loud = -1; 
+        }
+        else if (Loud < 0 || Loud > 100) {
+            printf("Ошибка: уровень громкости должен быть в пределах от 0 до 100.\n");
+        }
+        else {
+            printf("Уровень громкости видео изменен до %d\n", Loud);
+        }
+    } while (Loud < 0 || Loud > 100);
 }
 struct {
     char *TurnOnTheAdvert;

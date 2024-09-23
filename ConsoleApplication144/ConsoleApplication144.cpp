@@ -87,9 +87,18 @@ struct {
     char AdvPlayerOn;
 }ButtonStopAdv;
 int StopAdvs() {
-    puts("Если хотите остановить видео, нажмите 1, иначе - 0");
     int StopAdv = 0;
-    scanf("%d", &StopAdv); 
+    do {
+        puts("Если хотите остановить видео, нажмите 1, иначе - 0");
+        if (scanf("%d", &StopAdv) != 1) {
+            printf("Ошибка: введите числовое значение.\n");
+            while (getchar() != '\n');
+            StopAdv = -1;
+        }
+        else if (StopAdv < 0 || StopAdv > 1) {
+            printf("Ошибка: Если хотите остановить видео, нажмите 1, иначе - 0.\n");
+        }
+    } while (StopAdv < 0 || StopAdv > 1);
     if (StopAdv == 1) {
         puts("Реклама остановлена");
     }

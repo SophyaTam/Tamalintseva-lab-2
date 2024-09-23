@@ -19,12 +19,13 @@ void AddOptions(char AvailableOptions[N][M]) {
     strncpy(AvailableOptions[3], "4-Мелодраммы", M);
     strncpy(AvailableOptions[4], "5-Сериалы", M);
 }
+//Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 struct {
-    int EndAll;
+    int EndAllElements;
 }EndWork;
 void End() {
     int EndAll = 0;
-    puts("Нажмите 7, если хотите полностью завершить сеанс.");
+    printf("Если хотите завершить работу видеопроигрывателя, нажмите 7");
     scanf("%d", &EndAll);
 
     if (EndAll == 7) {

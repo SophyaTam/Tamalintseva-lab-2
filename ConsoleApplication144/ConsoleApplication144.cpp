@@ -56,6 +56,7 @@ int ChooseOptions() {
     }
     return Djanre;
 }
+//Функция звука для установки уровня громкости через ввод в консоль
 struct {
     int Loud;
     char Colour[10];
@@ -77,11 +78,13 @@ void VidVoice() {
         }
     } while (Loud < 0 || Loud > 100);
 }
+//Функция для выбора подключения и отключения рекламы через команды 0 и 1 и выбор этой рекламы на этапе консоли через числовые значения
 struct {
     char *TurnOnTheAdvert;
     char LastAdvert[N][M];
     int AllAdvert[N];
 }Advert;
+//Структура для возможности приостановки рекламы через команды 0 и 1
 struct {
     char StopAdv;
     char AdvPlayerOn;
@@ -173,10 +176,12 @@ void ShowAdv() {
         }
     }
 }
+//Структура для выбора видео и его проигрывания, на этапе консоли идет выбор названия видео из файла 
 struct {
     char LastVid[N][M];
     char AllVid[N][M];
 }Video;
+//Структура для приостановки и воспроизведения видео
 struct {
     char StopAdv;
     char AdvPlayerOn;
@@ -262,6 +267,7 @@ void ChooseVid() {
     VidVoice();
     printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]); OnVid(); End();
 }
+//Структура включения/выключения видеоплеера
 struct {
     char VidPlayerOn;
 }VideoPlayer;

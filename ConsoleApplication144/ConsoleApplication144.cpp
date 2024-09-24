@@ -240,23 +240,22 @@ void LastVids(char LastVid[N][M]) {
     }
 }
 void ChooseVid() {
-    char AllVid[N][M], LastVid[N][M], VidPlayerOn = 0;
+    char AllVid[N][M], LastVid[N][M], VidPlayerOn = 0,totalVideos=3;
     OpenVid(AllVid);
-    do {
-        LastVids(LastVid);
-        if (AllVid[0][0] == '\0') {
-            printf("Нет видео для воспроизведения!\n");
-            return;
+    while (1) {
+        if (totalVideos == 0) {
+            printf("Нет доступных видео для воспроизведения!\n");
+            break;
         }
 
         int randomIndex;
         int Allow;
-        srand(time(NULL));
 
         do {
-            randomIndex = rand() % 3;
+            randomIndex = rand() % totalVideos; 
             Allow = 1;
 
+            // Проверяем, не было ли это видео уже воспроизведено
             for (int i = 0; i < N; i++) {
                 if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
                     Allow = 0;
@@ -264,11 +263,30 @@ void ChooseVid() {
                 }
             }
         } while (Allow == 0);
+
+        // Сохраняем видео в LastVid
+        for (int i = 0; i < N; i++) {
+            if (LastVid[i][0] == '\0') {
+                strcpy(LastVid[i], AllVid[randomIndex]);
+                break;
+            }
+        }
+
         VidVoice();
-        printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]); OnVid(); End();
-        puts("Если вы хотите выйти из плеера, нажмите 1");
+        printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
+        OnVid();
+        End();
+
+        // Уменьшаем общее количество доступных видео на 1
+        totalVideos--;
+
+        // Спрашиваем пользователя, хочет ли он продолжить
+        puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
         scanf("%d", &VidPlayerOn);
-    } while (VidPlayerOn != 1);
+        if (VidPlayerOn == 1) {
+            break; // Выходим из цикла, если пользователь нажал 1
+        }
+    }
     if (VidPlayerOn == 1) {
         ChooseVid();
     }

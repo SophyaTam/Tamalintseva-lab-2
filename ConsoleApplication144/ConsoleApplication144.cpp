@@ -239,47 +239,44 @@ void LastVids(char LastVid[N][M]) {
         LastVid[i][0] = '\0';
     }
 }
-
 void ChooseVid() {
-    char AllVid[N][M], LastVid[N][M];
-    LastVids(LastVid);
-    OpenVid(AllVid); 
-    if (AllVid[0][0] == '\0') {
-        printf("Нет видео для воспроизведения!\n");
-        return;
-    }
-
-    int randomIndex;
-    int Allow;
-    srand(time(NULL));
-
+    char AllVid[N][M], LastVid[N][M], VidPlayerOn = 0;
+    OpenVid(AllVid);
     do {
-        randomIndex = rand() % 4; 
-        Allow = 1;
-
-        for (int i = 0; i < N; i++) {
-            if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
-                Allow = 0; 
-                break;
-            }
+        LastVids(LastVid);
+        if (AllVid[0][0] == '\0') {
+            printf("Нет видео для воспроизведения!\n");
+            return;
         }
-    } while (Allow == 0);
-    VidVoice();
-    printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]); OnVid(); End();
+
+        int randomIndex;
+        int Allow;
+        srand(time(NULL));
+
+        do {
+            randomIndex = rand() % 3;
+            Allow = 1;
+
+            for (int i = 0; i < N; i++) {
+                if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
+                    Allow = 0;
+                    break;
+                }
+            }
+        } while (Allow == 0);
+        VidVoice();
+        printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]); OnVid(); End();
+        puts("Если вы хотите выйти из плеера, нажмите 1");
+        scanf("%d", &VidPlayerOn);
+    } while (VidPlayerOn != 1);
+    if (VidPlayerOn == 1) {
+        ChooseVid();
+    }
 }
 //Структура включения/выключения видеоплеера
 struct {
     char VidPlayerOn;
 }VideoPlayer;
-void BaskPlayer() {
-    int dj = 0, VidPlayerOn = 0;
-    puts("Если вы хотите выйти из плеера, нажмите 1");
-    scanf("%d", &VidPlayerOn); 
-
-    if (VidPlayerOn == 1) {
-        ChooseVid(); 
-    }
-}
 int main()
 {
     SetConsoleCP(1251);
@@ -289,6 +286,5 @@ int main()
     int Djanre=0,Turn=0, AllAdvert[N], LastAdvert[N], Back=0;
     ShowAdv();
     ChooseVid();
-    BaskPlayer();
 }
 

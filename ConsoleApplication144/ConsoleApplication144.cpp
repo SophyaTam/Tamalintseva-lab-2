@@ -23,6 +23,7 @@ void AddOptions(char AvailableOptions[N][M]) {
 struct {
     int EndAllElements;
 }EndWork;
+//Функция завершения программы через ввод в консоль цифры 7
 void End() {
     int EndAll = 0;
     printf("Если хотите завершить работу видеопроигрывателя, нажмите 7");
@@ -33,6 +34,8 @@ void End() {
         exit(0); 
     }
 }
+
+//Функция для вывода на экран всех доступных направлений и выбора одного из них
 int ChooseOptions() {
     int Djanre = 0;
     char AvailableOptions[N][M];
@@ -61,6 +64,7 @@ struct {
     int Loud;
     char Colour[10];
 }Voice;
+//Функция для ввода численного значения громкости видео
 void VidVoice() {
     int Loud = 0;
     do {
@@ -89,6 +93,7 @@ struct {
     char StopAdv;
     char AdvPlayerOn;
 }ButtonStopAdv;
+//Функция для остановки рекламы посредством ввода цифры 1
 int StopAdvs() {
     int StopAdv = 0;
     do {
@@ -107,7 +112,7 @@ int StopAdvs() {
     }
     return StopAdv;
 }
-
+//Функция для  возобновления воспроизведения видео через  ввод  1
 void OnAdv() {
     int StopAdv = 0;
     int AdvPlayerOn = 0; 
@@ -126,25 +131,26 @@ void OnAdv() {
         }
     }
 }
+//Функция подключения рекламы для просмотра через ввод  1
 int ChooseAdvert() {
     int Turn;
     puts("Введите 1, если хотите добавить рекламу и 0 - если нет");
     scanf("%d", &Turn);
     return Turn;
 }
-
+//Функция добавления названий рекламы в массив
 void NameAd(int AllAdvert[N]) {
     for (int i = 0; i < N; i++) {
         AllAdvert[i] = i + 1; 
     }
 }
-
+//Функция заполнения массива с уже проигранной рекламой
 void LastAdverts(int LastAdvert[N]) {
     for (int i = 0; i < N; i++) {
         LastAdvert[i] = 0; 
     }
 }
-
+//Функция для выбора рандомной рекламы и её воспроизведения
 void ShowAdv() {
     int TurnOn = 0, NamesAdd[N], LastAdvert[N];
 
@@ -186,6 +192,7 @@ struct {
     char StopAdv;
     char AdvPlayerOn;
 }ButtonStopVid;
+//Функция для остановки видео через ввод 1
 int StopVids() {
     puts("Если хотите остановить видео, нажмите 1, иначе - 0");
     int StopVid = 0;
@@ -195,7 +202,7 @@ int StopVids() {
     }
     return StopVid;
 }
-
+//Функция для продолжения просмотра  через ввод 1
 void OnVid() {
     int StopVid = 0;
     int VidPlayerOn = 0;
@@ -214,6 +221,7 @@ void OnVid() {
         }
     }
 }
+//Функция для заполнения массива с названиями видео для просмотра
 void OpenVid(char AllVid[N][M]) {
     int Djanre = ChooseOptions();
 
@@ -233,12 +241,13 @@ void OpenVid(char AllVid[N][M]) {
 
     fclose(file);
 }
-
+//Функция для заполнения массива с проигранными видео
 void LastVids(char LastVid[N][M]) {
     for (int i = 0; i < N; i++) {
         LastVid[i][0] = '\0';
     }
 }
+//Функция для вывода рандомного видео
 void ChooseVid() {
     char AllVid[N][M], LastVid[N][M], VidPlayerOn = 0,totalVideos=3;
     OpenVid(AllVid);
@@ -263,8 +272,6 @@ void ChooseVid() {
                 }
             }
         } while (Allow == 0);
-
-        // Сохраняем видео в LastVid
         for (int i = 0; i < N; i++) {
             if (LastVid[i][0] == '\0') {
                 strcpy(LastVid[i], AllVid[randomIndex]);
@@ -276,15 +283,11 @@ void ChooseVid() {
         printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
         OnVid();
         End();
-
-        // Уменьшаем общее количество доступных видео на 1
         totalVideos--;
-
-        // Спрашиваем пользователя, хочет ли он продолжить
         puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
         scanf("%d", &VidPlayerOn);
         if (VidPlayerOn == 1) {
-            break; // Выходим из цикла, если пользователь нажал 1
+            break; 
         }
     }
     if (VidPlayerOn == 1) {

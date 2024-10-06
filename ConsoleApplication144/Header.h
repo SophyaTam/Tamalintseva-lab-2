@@ -13,9 +13,13 @@ class MainMenu {
 private:
     char AvailableOptions[N][M];
 public:
+    MainMenu();
     void AddOptions();
     int ChooseOptions();
 };
+MainMenu::MainMenu() {
+    AddOptions(); // Инициализируем массив доступных опций
+}
 void MainMenu:: AddOptions() {
         strncpy(AvailableOptions[0], "1-Детское", M);
         strncpy(AvailableOptions[1], "2-Детективы", M);
@@ -26,9 +30,8 @@ void MainMenu:: AddOptions() {
 //Функция для вывода на экран всех доступных направлений и выбора одного из них
 int MainMenu:: ChooseOptions() {
     int Djanre = 0;
-    char AvailableOptions[N][M];
-    for (int i = 0; i < N; i++) {
-        std::cout << AvailableOptions[i] << std::endl; 
+    for (int i = 0; i < 5; i++) {
+        printf("%s\n", AvailableOptions[i]);
     }
     puts("Выберите желаемое направление (1-5): ");
     while (1) {
@@ -83,71 +86,8 @@ void Voice:: VidVoice() {
         }
     } while (Loud < 0 || Loud > 100);
 }
-//Функция для выбора подключения и отключения рекламы через команды 0 и 1 и выбор этой рекламы на этапе консоли через числовые значения
-class Advert {
-private:
-    char* TurnOnTheAdvert;
-    char LastAdvert[N][M];
-    int AllAdvert[N];
-public:
-    int ChooseAdvert();
-    void NameAd(int LastAdvert[N]);
-    void LastAdverts(int LastAdvert[N]);
-    void ShowAdv();
-};
-//Функция подключения рекламы для просмотра через ввод  1
-int Advert:: ChooseAdvert() {
-    int Turn;
-    puts("Введите 1, если хотите добавить рекламу и 0 - если нет");
-    scanf("%d", &Turn);
-    return Turn;
-}
-//Функция добавления названий рекламы в массив
-void Advert:: NameAd(int AllAdvert[N]) {
-    for (int i = 0; i < N; i++) {
-        AllAdvert[i] = i + 1;
-    }
-}
-//Функция заполнения массива с уже проигранной рекламой
-void Advert:: LastAdverts(int LastAdvert[N]) {
-    for (int i = 0; i < N; i++) {
-        LastAdvert[i] = 0;
-    }
-}
-//Функция для выбора рандомной рекламы и её воспроизведения
-void Advert:: ShowAdv() {
-    int TurnOn = 0, NamesAdd[N], LastAdvert[N];
-
-    TurnOn = ChooseAdvert();
-    NameAd(NamesAdd);
-    LastAdverts(LastAdvert);
-
-    if (TurnOn == 1) {
-        srand(time(NULL));
-        int randomIndex;
-        int Allow;
-
-        do {
-            randomIndex = rand() % N;
-            Allow = 1;
-            for (int i = 0; i < N; i++) {
-                if (NamesAdd[randomIndex] == LastAdvert[i]) {
-                    Allow = 0;
-                    break;
-                }
-            }
-        } while (Allow == 0);
-        printf("Играет реклама: #%d........\n", NamesAdd[randomIndex]); OnAdv();
-        for (int i = 0; i < N; i++) {
-            if (LastAdvert[i] == 0) {
-                LastAdvert[i] = NamesAdd[randomIndex];
-                break;
-            }
-        }
-    }
-}
 //Структура для возможности приостановки рекламы через команды 0 и 1
-class ButtonStopAdv{
+class ButtonStopAdv {
 private:
     char StopAdv;
     char AdvPlayerOn;
@@ -156,7 +96,7 @@ public:
     void OnAdv();
 };
 //Функция для остановки рекламы посредством ввода цифры 1
-int ButtonStopAdv:: StopAdvs() {
+int ButtonStopAdv::StopAdvs() {
     int StopAdv = 0;
     do {
         puts("Если хотите остановить видео, нажмите 1, иначе - 0");
@@ -175,7 +115,7 @@ int ButtonStopAdv:: StopAdvs() {
     return StopAdv;
 }
 //Функция для  возобновления воспроизведения видео через  ввод  1
-void ButtonStopAdv:: OnAdv() {
+void ButtonStopAdv::OnAdv() {
     int StopAdv = 0;
     int AdvPlayerOn = 0;
 
@@ -193,20 +133,138 @@ void ButtonStopAdv:: OnAdv() {
         }
     }
 }
+//Функция для выбора подключения и отключения рекламы через команды 0 и 1 и выбор этой рекламы на этапе консоли через числовые значения
+class Advert {
+private:
+    char TurnOnTheAdvert;
+    int AllAdvert[N], NamesAdd[N], LastAdvert[N];
+
+public:
+    Advert(); // Конструктор для инициализации
+    int ChooseAdvert();
+    void NameAd();
+    void LastAdverts();
+    void ShowAdv();
+};
+// Конструктор класса Advert
+Advert::Advert() {
+    LastAdverts(); // Инициализируем LastAdvert
+}
+
+// Функция подключения рекламы для просмотра через ввод 1
+int Advert::ChooseAdvert() {
+    int Turn;
+    std::cout << "Введите 1, если хотите добавить рекламу и 0 - если нет: ";
+    std::cin >> Turn;
+    return Turn;
+}
+
+// Функция добавления названий рекламы в массив
+void Advert::NameAd() {
+    for (int i = 0; i < N; i++) {
+        NamesAdd[i] = i + 1; // Заполнение массива с названиями
+    }
+}
+
+// Функция заполнения массива с уже проигранной рекламой
+void Advert::LastAdverts() {
+    for (int i = 0; i < N; i++) {
+        LastAdvert[i] = 0; // Инициализация не воспроизводимой рекламы
+    }
+}
+
+// Функция для выбора рандомной рекламы и её воспроизведения
+void Advert::ShowAdv() {
+    int TurnOn = ChooseAdvert();
+    NameAd();
+    LastAdverts();
+
+    if (TurnOn == 1) {
+        srand(static_cast<unsigned int>(time(NULL)));
+        int randomIndex;
+        bool Allow;
+
+        do {
+            randomIndex = rand() % N; // Выбираем случайный индекс
+            Allow = true;
+            for (int i = 0; i < N; i++) {
+                // Проверяем, не была ли уже показана эта реклама
+                if (NamesAdd[randomIndex] == LastAdvert[i]) {
+                    Allow = false;
+                    break;
+                }
+            }
+        } while (!Allow);
+
+        printf("Играет реклама: #%d........\n", NamesAdd[randomIndex]);
+        ButtonStopAdv adv;
+        adv.OnAdv();
+
+        // Запоминаем, что реклама была показана
+        for (int i = 0; i < N; i++) {
+            if (LastAdvert[i] == 0) { // Найти первое свободное место
+                LastAdvert[i] = NamesAdd[randomIndex];
+                break;
+            }
+        }
+    }
+}
+//Структура для приостановки и воспроизведения видео
+class ButtonStopVid {
+private:
+    char StopAdv;
+    char AdvPlayerOn;
+public:
+    int StopVids();
+    void OnVid();
+}ButtonStopVid;
+//Функция для остановки видео через ввод 1
+int ButtonStopVid::StopVids() {
+    puts("Если хотите остановить видео, нажмите 1, иначе - 0");
+    int StopVid = 0;
+    scanf("%d", &StopVid);
+    if (StopVid == 1) {
+        puts("Видео остановлено");
+    }
+    return StopVid;
+}
+//Функция для продолжения просмотра  через ввод 1
+void ButtonStopVid::OnVid() {
+    int StopVid = 0;
+    int VidPlayerOn = 0;
+
+    while (1) {
+        StopVid = StopVids();
+
+        if (StopVid == 0) {
+            puts("Вы выбрали продолжить.");
+            break;
+        }
+        puts("Для дальнейшего просмотра нажмите 1");
+        scanf("%d", &VidPlayerOn);
+        if (VidPlayerOn == 1) {
+            break;
+        }
+    }
+}
 //Структура для выбора видео и его проигрывания, на этапе консоли идет выбор названия видео из файла 
 class Video {
 private:
     char LastVid[N][M];
     char AllVid[N][M];
 public:
-    void OpenVid(char AllVid[N][M]);
-    void LastVids(char LastVid[N][M]);
+    Video();
+    void OpenVid();
+    void LastVids();
     void ChooseVid();
-
 };
+Video::Video() {
+    LastVids(); // Инициализируем массив LastVid
+}
 //Функция для заполнения массива с названиями видео для просмотра
-void Video:: OpenVid(char AllVid[N][M]) {
-    int Djanre = ChooseOptions();
+void Video:: OpenVid() {
+    MainMenu menu; 
+    int Djanre = menu.ChooseOptions(); 
     char filename[M];
     snprintf(filename, M, "%d.txt", Djanre);
     FILE* file = fopen(filename, "r");
@@ -222,15 +280,15 @@ void Video:: OpenVid(char AllVid[N][M]) {
     fclose(file);
 }
 //Функция для заполнения массива с проигранными видео
-void Video:: LastVids(char LastVid[N][M]) {
+void Video:: LastVids() {
     for (int i = 0; i < N; i++) {
         LastVid[i][0] = '\0';
     }
 }
 //Функция для вывода рандомного видео
 void Video:: ChooseVid() {
-    char AllVid[N][M], LastVid[N][M], VidPlayerOn = 0, totalVideos = 3;
-    OpenVid(AllVid);
+    char VidPlayerOn = 0, totalVideos = 3;
+    OpenVid();
     while (1) {
         if (totalVideos == 0) {
             printf("Нет доступных видео для воспроизведения!\n");
@@ -258,10 +316,11 @@ void Video:: ChooseVid() {
                 break;
             }
         }
-        VidVoice();
+        Voice VidVoice();
         printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
-        OnVid();
-        End();
+        ButtonStopVid.OnVid();
+        EndWork end; 
+        end.End();
         totalVideos--;
         puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
         scanf("%d", &VidPlayerOn);
@@ -271,44 +330,6 @@ void Video:: ChooseVid() {
     }
     if (VidPlayerOn == 1) {
         ChooseVid();
-    }
-}
-//Структура для приостановки и воспроизведения видео
-class ButtonStopVid {
-private:
-    char StopAdv;
-    char AdvPlayerOn;
-public:
-    int StopVids();
-    void OnVid();
-}ButtonStopVid;
-//Функция для остановки видео через ввод 1
-int ButtonStopVid:: StopVids() {
-    puts("Если хотите остановить видео, нажмите 1, иначе - 0");
-    int StopVid = 0;
-    scanf("%d", &StopVid);
-    if (StopVid == 1) {
-        puts("Видео остановлено");
-    }
-    return StopVid;
-}
-//Функция для продолжения просмотра  через ввод 1
-void ButtonStopVid:: OnVid() {
-    int StopVid = 0;
-    int VidPlayerOn = 0;
-
-    while (1) {
-        StopVid = StopVids();
-
-        if (StopVid == 0) {
-            puts("Вы выбрали продолжить.");
-            break;
-        }
-        puts("Для дальнейшего просмотра нажмите 1");
-        scanf("%d", &VidPlayerOn);
-        if (VidPlayerOn == 1) {
-            break;
-        }
     }
 }
 //Структура включения/выключения видеоплеера

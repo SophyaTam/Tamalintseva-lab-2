@@ -14,7 +14,10 @@ int main()
     setlocale(LC_ALL, "Russian");
     char AvailableOptions[N - 1][M - 1], AllVid[N][M], LastVid[N][M];
     int Djanre=0,Turn=0, AllAdvert[N], LastAdvert[N], Back=0;
-    ShowAdv();
-    ChooseVid();
+    Advert advert;  // Создаем объект класса Advert
+    Video video;    // Создаем объект класса Video
+
+    advert.ShowAdv(); // Показываем рекламу
+    video.ChooseVid(); // Вызываем метод для выбора видео
 }
 

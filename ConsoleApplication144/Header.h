@@ -9,55 +9,53 @@
 #define M 200
 //Структура для описания главного меню в котором пользователи будут выбирать направление для просмотра
 //Представляет собой список доступных жанров
-struct {
-    char AvailableOptions[N - 1][M - 1];
-}MainMenu[N][M];
-void AddOptions(char AvailableOptions[N][M]) {
-    strncpy(AvailableOptions[0], "1-Детское", M);
-    strncpy(AvailableOptions[1], "2-Детективы", M);
-    strncpy(AvailableOptions[2], "3-Комедии", M);
-    strncpy(AvailableOptions[3], "4-Мелодраммы", M);
-    strncpy(AvailableOptions[4], "5-Сериалы", M);
+class MainMenu {
+private:
+    char AvailableOptions[N][M];
+public:
+    void AddOptions();
+    int ChooseOptions();
+};
+void MainMenu:: AddOptions() {
+        strncpy(AvailableOptions[0], "1-Детское", M);
+        strncpy(AvailableOptions[1], "2-Детективы", M);
+        strncpy(AvailableOptions[2], "3-Комедии", M);
+        strncpy(AvailableOptions[3], "4-Мелодраммы", M);
+        strncpy(AvailableOptions[4], "5-Сериалы", M);
+}
+//Функция для вывода на экран всех доступных направлений и выбора одного из них
+int MainMenu:: ChooseOptions() {
+    int Djanre = 0;
+    char AvailableOptions[N][M];
+    for (int i = 0; i < N; i++) {
+        std::cout << AvailableOptions[i] << std::endl; 
+    }
+    puts("Выберите желаемое направление (1-5): ");
+    while (1) {
+        scanf("%d", &Djanre);
+        if (Djanre >= 1 && Djanre <= 5) {break;}
+        else {
+            puts("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
+            while (getchar() != '\n');
+        }}
+    return Djanre;
 }
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
-struct {
-    int EndAllElements;
-}EndWork;
+class EndWork {
+    private:
+        int EndAllElements;
+    public:
+        void End();
+};
 //Функция завершения программы через ввод в консоль цифры 7
-void End() {
+void EndWork:: End() {
     int EndAll = 0;
     printf("Если хотите завершить работу видеопроигрывателя, нажмите 7");
     scanf("%d", &EndAll);
-
     if (EndAll == 7) {
         puts("Завершение сеанса...");
         exit(0);
     }
-}
-
-//Функция для вывода на экран всех доступных направлений и выбора одного из них
-int ChooseOptions() {
-    int Djanre = 0;
-    char AvailableOptions[N][M];
-    AddOptions(AvailableOptions);
-
-    for (int i = 0; i < 5; i++) {
-        printf("%s\n", AvailableOptions[i]);
-    }
-
-    puts("Выберите желаемое направление (1-5): ");
-
-    while (1) {
-        scanf("%d", &Djanre);
-        if (Djanre >= 1 && Djanre <= 5) {
-            break;
-        }
-        else {
-            puts("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
-            while (getchar() != '\n');
-        }
-    }
-    return Djanre;
 }
 //Функция звука для установки уровня громкости через ввод в консоль
 struct {

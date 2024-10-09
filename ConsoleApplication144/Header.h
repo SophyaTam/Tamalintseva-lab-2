@@ -7,7 +7,7 @@
 
 #define N 200
 #define M 200
-//Структура для описания главного меню в котором пользователи будут выбирать направление для просмотра
+//Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
 //Представляет собой список доступных жанров
 class MainMenu {
 private:
@@ -18,7 +18,7 @@ public:
     int ChooseOptions();
 };
 MainMenu::MainMenu() {
-    AddOptions(); // Инициализация массива доступных опций
+    AddOptions(); 
 }
 void MainMenu::AddOptions() {
     strncpy(AvailableOptions[0], "1-Детское", M);
@@ -61,7 +61,7 @@ void EndWork:: End() {
         exit(0);
     }
 }
-//Функция звука для установки уровня громкости через ввод в консоль
+//Класс звука для установки уровня громкости через ввод в консоль соответствующего числа от 0 до 100
 class Voice {
 private:
     int Loud;
@@ -87,7 +87,7 @@ void Voice:: VidVoice() {
         }
     } while (Loud < 0 || Loud > 100);
 }
-//Структура для возможности приостановки рекламы через команды 0 и 1
+//Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
 private:
     char TurnOnTheAdvert;
@@ -155,37 +155,27 @@ void Advert::ShowAdv() {
     int TurnOn = ChooseAdvert();
     NameAd();
     LastAdverts();
-
     if (TurnOn == 1) {
         srand(static_cast<unsigned int>(time(NULL)));
         int randomIndex;
         bool Allow;
-
         do {
-            randomIndex = rand() % N; // Выбираем случайный индекс
+            randomIndex = rand() % N; 
             Allow = true;
             for (int i = 0; i < N; i++) {
-                // Проверяем, не была ли уже показана эта реклама
                 if (NamesAdd[randomIndex] == LastAdvert[i]) {
                     Allow = false;
                     break;
                 }
             }
         } while (!Allow);
-
         printf("Играет реклама: #%d........\n", NamesAdd[randomIndex]);
-
-        ButtonStopAdv adv; // Создаем объект нашего подкласса
-        adv.OnAdv(); // Вызываем метод
-
-        // Запоминаем, что реклама была показана
+        ButtonStopAdv adv; 
+        adv.OnAdv(); 
         for (int i = 0; i < N; i++) {
-            if (LastAdvert[i] == 0) { // Найти первое свободное место
+            if (LastAdvert[i] == 0) { 
                 LastAdvert[i] = NamesAdd[randomIndex];
-                break;
-            }
-        }
-    }
+                break;}}}
 }
 
 // Функция для остановки рекламы посредством ввода цифры 1
@@ -227,7 +217,7 @@ void ButtonStopAdv::OnAdv() {
         }
     }
 }
-// Структура для выбора видео и его проигрывания
+// Класс для выбора видео и его проигрывания
 class Video {
 private:
     char** LastVid;
@@ -251,24 +241,23 @@ public:
 };
 // Конструктор класса Video
 Video::Video() {
-    // Выделяем память для массивов
     LastVid = new char* [N];
     AllVid = new char* [N];
     for (int i = 0; i < N; ++i) {
-        LastVid[i] = new char[M]; // Для каждого элемента выделяем память
-        AllVid[i] = new char[M];  // То же для AllVid
+        LastVid[i] = new char[M]; 
+        AllVid[i] = new char[M]; 
     }
-    LastVids(); // Инициализация LastVid
+    LastVids(); 
 }
 
 // Деструктор класса Video
 Video::~Video() {
     for (int i = 0; i < N; ++i) {
-        delete[] LastVid[i]; // Освобождение памяти
-        delete[] AllVid[i];  // Освобождение памяти
+        delete[] LastVid[i]; 
+        delete[] AllVid[i]; 
     }
-    delete[] LastVid; // Освобождение массива указателей
-    delete[] AllVid;  // Освобождение массива указателей
+    delete[] LastVid; 
+    delete[] AllVid; 
 }
 // Функция для остановки видео через ввод 1
 int ButtonStopVid::StopVids() {
@@ -340,8 +329,6 @@ void Video::ChooseVid() {
         do {
             randomIndex = rand() % totalVideos;
             Allow = 1;
-
-            // Проверяем, не было ли это видео уже воспроизведено
             for (int i = 0; i < N; i++) {
                 if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
                     Allow = 0;
@@ -372,6 +359,7 @@ void Video::ChooseVid() {
         ChooseVid();
     }
 }
+//Формальный класс видеопроигрывателя как объекта курсового проета
 class VideoPlayer {
 private:
     char VidPlayerOn;

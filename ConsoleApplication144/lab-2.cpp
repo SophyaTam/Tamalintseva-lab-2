@@ -26,17 +26,17 @@ int main()
     Advert* advert = new Advert();
     Video* video = new Video();
 
-    advert->ShowAdv(); // Показываем рекламу
-    video->ChooseVid(); // Вызываем метод для выбора видео
+    advert->ShowAdv(); 
+    video->ChooseVid();
 
     // Освобождение динамически выделенной памяти
-    delete[] AvailableOptions; // Освобождаем память для массива AvailableOptions
-    delete[] AllVid;          // Освобождаем память для массива AllVid
-    delete[] LastVid;         // Освобождаем память для массива LastVid
-    delete[] AllAdvert;       // Освобождаем память для массива AllAdvert
-    delete[] LastAdvert;      // Освобождаем память для массива LastAdvert
-    delete advert;            // Освобождаем память для объекта Advert
-    delete video;             // Освобождаем память для объекта Video
+    delete[] AvailableOptions; 
+    delete[] AllVid;          
+    delete[] LastVid;         
+    delete[] AllAdvert;       
+    delete[] LastAdvert;      
+    delete advert;            
+    delete video;             
 
     return 0;
 }

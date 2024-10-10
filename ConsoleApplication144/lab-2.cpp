@@ -13,7 +13,7 @@ int main()
     SetConsoleOutputCP(1251);
     setlocale(LC_ALL, "Russian");
 
-    // Память для массива видео
+   // Память для массива видео
     char(*AvailableOptions)[M] = new char[N][M];
     char(*AllVid)[M] = new char[N][M];
     char(*LastVid)[M] = new char[N][M];
@@ -25,7 +25,6 @@ int main()
     // Динамическое выделение объектов классов Advert и Video
     Advert* advert = new Advert();
     Video* video = new Video();
-
     advert->ShowAdv(); 
     video->ChooseVid();
 

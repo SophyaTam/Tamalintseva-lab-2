@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <conio.h>
+#include <limits>
 
 #define N 200
 #define M 200
@@ -44,7 +45,7 @@ public:
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {
 private:
-    int EndAllElements; 
+    int EndAllElements; // Эта переменная не используется в текущей реализации End()
 
 public:
     // Метод завершения программы через ввод в консоль цифры 7
@@ -63,27 +64,29 @@ public:
 class Voice {
 private:
     int Loud;
-    char Colour[10];
 public:
-    //Метод для ввода численного значения громкости видео
-    void VidVoice() {
+    // Метод для ввода численного значения громкости видео
+    int& VidVoice() { // Возвращает ссылку на Loud
         int Loud = 0;
-        do {
-            printf("Введите уровень громкости (от 0 до 100): ");
-            if (scanf("%d", &Loud) != 1) {
-                printf("Ошибка: введите числовое значение.\n");
-                while (getchar() != '\n');
-                Loud = -1;
-            }
-            else if (Loud < 0 || Loud > 100) {
-                printf("Ошибка: уровень громкости должен быть в пределах от 0 до 100.\n");
-            }
-            else {
-                printf("Уровень громкости видео изменен до %d\n", Loud);
-            }
-        } while (Loud < 0 || Loud > 100);
-    };
+        do{
+        printf("Введите уровень громкости (от 0 до 100): ");
+        if (scanf("%d", &Loud) != 1) {
+            printf("Ошибка: введите числовое значение.\n");
+            while (getchar() != '\n');
+            Loud = -1;
+        }
+        else if (Loud < 0 || Loud > 100) {
+            printf("Ошибка: уровень громкости должен быть в пределах от 0 до 100.\n");
+        }
+        else {
+            printf("Уровень громкости видео изменен до %d\n", Loud);
+        }
+    } while (Loud < 0 || Loud > 100);
+        return Loud; // Возвращаем ссылку на член данных Loud
+    }
+    int getLoud() const { return Loud; } 
 };
+
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
 private:
@@ -314,8 +317,8 @@ void Video::ChooseVid() {
             }
         }
         printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
-        Voice voi;
-        voi.VidVoice();
+        Voice voice;
+        int& loudness = voice.VidVoice(); // Получаем ссылку на Loud
         ButtonStopVid vid;
         vid.OnVid();
         bool endSession = false;

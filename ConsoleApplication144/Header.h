@@ -44,18 +44,20 @@ public:
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {
 private:
-    int EndAllElements;
+    int EndAllElements; 
+
 public:
-    //Метод завершения программы через ввод в консоль цифры 7
-    void End() {
+    // Метод завершения программы через ввод в консоль цифры 7
+    void End(bool* endSession) { // теперь принимает указатель на bool
         int EndAll = 0;
-        printf("Если хотите завершить работу видеопроигрывателя, нажмите 7");
-        scanf("%d", &EndAll);
+        puts("Если хотите завершить работу видеопроигрывателя, нажмите 7: ");
+        scanf_s("%d", &EndAll);
         if (EndAll == 7) {
             puts("Завершение сеанса...");
             exit(0);
+            *endSession = true; // устанавливаем флаг true через указатель
         }
-    };
+    }
 };
 //Класс звука для установки уровня громкости через ввод в консоль соответствующего числа от 0 до 100
 class Voice {
@@ -122,7 +124,6 @@ public:
     };
     void ShowAdv();
 };
-
 // Определение подкласса ButtonStopAdv
 class ButtonStopAdv : public Advert { //  ButtonStopAdv подклассо Advert
 private:
@@ -317,8 +318,9 @@ void Video::ChooseVid() {
         voi.VidVoice();
         ButtonStopVid vid;
         vid.OnVid();
-        EndWork end;
-        end.End();
+        bool endSession = false;
+        EndWork endWork;
+        endWork.End(&endSession);
         totalVideos--;
         puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
         scanf("%d", &VidPlayerOn);

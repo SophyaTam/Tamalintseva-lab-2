@@ -24,9 +24,10 @@ int main()
 
     // Динамическое выделение объектов классов Advert и Video
     VideoPlayer video1(120);
-    VideoPlayer video2(60);
-    VideoPlayer video3 = video1 + video2;
-    video3.printPlaytime();
+    VideoPlayer video2 = video1; // Конструктор копирования вызывается
+    VideoPlayer video3(60);
+    VideoPlayer video4 = video2 + video3;
+    video4.printPlaytime(); 
 
     Advert* advert = new Advert();
     Video* video = new Video();

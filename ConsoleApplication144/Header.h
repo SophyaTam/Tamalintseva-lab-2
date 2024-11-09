@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <conio.h>
 #include <limits>
+#include <iostream>
+#include <vector>
+#include <string>
 
 #define N 200
 #define M 200
@@ -12,35 +15,39 @@
 //Представляет собой список доступных жанров
 class MainMenu {
 private:
-    char AvailableOptions[N][M];
+    std::vector<std::string> AvailableOptions;
+
 public:
     MainMenu() {
         AddOptions();
-    };
+    }
+
     void AddOptions() {
-        strncpy(AvailableOptions[0], "1-Детское", M);
-        strncpy(AvailableOptions[1], "2-Детективы", M);
-        strncpy(AvailableOptions[2], "3-Комедии", M);
-        strncpy(AvailableOptions[3], "4-Мелодраммы", M);
-        strncpy(AvailableOptions[4], "5-Сериалы", M);
-    };
-    //Метод для вывода на экран всех доступных направлений и выбора одного из них
+        AvailableOptions.push_back("Детское");
+        AvailableOptions.push_back("Детективы");
+        AvailableOptions.push_back("Комедии");
+        AvailableOptions.push_back("Мелодраммы");
+        AvailableOptions.push_back("Сериалы");
+    }
+
     int ChooseOptions() {
         int Djanre = 0;
-        for (int i = 0; i < 5; i++) {
-            printf("%s\n", AvailableOptions[i]);
+        for (size_t i = 0; i < AvailableOptions.size(); ++i) {
+            std::cout << i + 1 << ". " << AvailableOptions[i] << std::endl; 
         }
-        puts("Выберите желаемое направление (1-5): ");
-        while (1) {
-            scanf("%d", &Djanre);
-            if (Djanre >= 1 && Djanre <= 5) { break; }
+        std::cout << "Выберите желаемое направление (1-" << AvailableOptions.size() << "): ";
+        while (true) {
+            if (!(std::cin >> Djanre) || Djanre < 1 || Djanre > AvailableOptions.size()) {
+                std::cout << "Неверный ввод! Пожалуйста, введите число от 1 до " << AvailableOptions.size() << "." << std::endl;
+                std::cin.clear(); 
+                std::cin.ignore(256, '\n'); 
+            }
             else {
-                puts("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
-                while (getchar() != '\n');
+                break;
             }
         }
         return Djanre;
-    };
+    }
 };
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {

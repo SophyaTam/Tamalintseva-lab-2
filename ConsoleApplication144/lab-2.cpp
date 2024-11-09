@@ -23,10 +23,16 @@ int main()
     int Djanre = 0, Turn = 0, Back = 0;
 
     // Динамическое выделение объектов классов Advert и Video
+    VideoPlayer video1(120);
+    VideoPlayer video2(60);
+    VideoPlayer video3 = video1 + video2;
+    video3.printPlaytime();
+
     Advert* advert = new Advert();
     Video* video = new Video();
     advert->ShowAdv(); 
     video->ChooseVid();
+  
 
     // Освобождение динамически выделенной памяти
     delete[] AvailableOptions; 

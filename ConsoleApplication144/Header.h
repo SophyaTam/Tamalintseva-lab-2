@@ -86,7 +86,6 @@ public:
     }
     int getLoud() const { return Loud; } 
 };
-
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
 private:
@@ -338,5 +337,14 @@ void Video::ChooseVid() {
 //Формальный класс видеопроигрывателя как объекта курсового проета
 class VideoPlayer {
 private:
-    char VidPlayerOn;
+    int playtime;
+public:
+    VideoPlayer(int playtime) : playtime(playtime) {}
+    VideoPlayer operator+(const VideoPlayer& other) const {
+        return VideoPlayer(playtime + other.playtime);
+    }
+    void printPlaytime() const {
+        std::cout << "Время воспроизведения: " << playtime << " секунд" << std::endl;
+    }
 };
+

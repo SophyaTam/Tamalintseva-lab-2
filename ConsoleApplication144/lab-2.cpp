@@ -29,6 +29,7 @@ int main()
     VideoPlayer video4 = video2 + video3;
     video4.printPlaytime(); 
 
+    int vectorSize = 5; // Задайте нужный размер векторов
     Advert* advert = new Advert();
     Video* video = new Video();
     advert->ShowAdv(); 

@@ -8,7 +8,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
 #define N 200
 #define M 200
 //Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
@@ -100,6 +99,7 @@ private:
     int* AllAdvert;
     int* NamesAdd;
     int* LastAdvert;
+
 public:
     Advert() {
         AllAdvert = new int[N];
@@ -107,11 +107,51 @@ public:
         LastAdvert = new int[N];
         LastAdverts();
     };
+
+    // Копирующий конструктор
+    Advert(const Advert& other) {
+        AllAdvert = new int[N];
+        NamesAdd = new int[N];
+        LastAdvert = new int[N];
+        TurnOnTheAdvert = other.TurnOnTheAdvert;
+
+        for (int i = 0; i < N; i++) {
+            AllAdvert[i] = other.AllAdvert[i];
+            NamesAdd[i] = other.NamesAdd[i];
+            LastAdvert[i] = other.LastAdvert[i];
+        }
+    }
+
+    // Перезагрузка оператора присваивания
+    Advert& operator=(const Advert& other) {
+        if (this != &other) {
+            // Освобождение текущей памяти
+            delete[] AllAdvert;
+            delete[] NamesAdd;
+            delete[] LastAdvert;
+
+            // Выделение новой памяти
+            AllAdvert = new int[N];
+            NamesAdd = new int[N];
+            LastAdvert = new int[N];
+            TurnOnTheAdvert = other.TurnOnTheAdvert;
+
+            // Копирование данных
+            for (int i = 0; i < N; i++) {
+                AllAdvert[i] = other.AllAdvert[i];
+                NamesAdd[i] = other.NamesAdd[i];
+                LastAdvert[i] = other.LastAdvert[i];
+            }
+        }
+        return *this;
+    }
+
     ~Advert() {
         delete[] AllAdvert;
         delete[] NamesAdd;
         delete[] LastAdvert;
     };
+
     // Метод подключения рекламы для просмотра через ввод 1
     int ChooseAdvert() {
         int Turn;
@@ -119,18 +159,21 @@ public:
         scanf("%d", &Turn);
         return Turn;
     };
+
     // Метод добавления названий рекламы в массив
     void NameAd() {
         for (int i = 0; i < N; i++) {
             NamesAdd[i] = i + 1; // Заполнение массива с названиями
         }
     };
+
     // Метод заполнения массива с уже проигранной рекламой
     void LastAdverts() {
         for (int i = 0; i < N; i++) {
             LastAdvert[i] = 0; // Инициализация не воспроизводимой рекламы
         }
     };
+
     void ShowAdv();
 };
 // Определение подкласса ButtonStopAdv
@@ -158,6 +201,7 @@ public:
         }
         return StopAdv;
     };
+
     // Метод для возобновления воспроизведения видео через ввод 1
     void OnAdv() {
         int StopAdv = 0;
@@ -213,7 +257,6 @@ class Video {
 private:
     char** LastVid;
     char** AllVid;
-
 public:
     Video() {
         LastVid = new char* [N];
@@ -257,7 +300,33 @@ public:
         }
     };
     void ChooseVid();
+    friend int chooseRandomVideo(Video& video); // Объявление дружественной функции
 };
+//Дружественная функция для выбора случайного видео
+int chooseRandomVideo(Video& video) {
+    if (video.AllVid == nullptr) return -1; 
+
+    int totalVideos = 0;
+    for (int i = 0; i < 4; ++i) {
+        if (video.AllVid[i][0] != '\0') totalVideos++;
+    }
+
+    if (totalVideos == 0) return -1; 
+
+    int randomIndex;
+    int Allow;
+    do {
+        randomIndex = rand() % totalVideos;
+        Allow = 1;
+        for (int i = 0; i < 4; i++) {
+            if (strcmp(video.AllVid[randomIndex], video.LastVid[i]) == 0) {
+                Allow = 0;
+                break;
+            }
+        }
+    } while (Allow == 0);
+    return randomIndex;
+}
 //Структура для приостановки и воспроизведения видео
 class ButtonStopVid :public Video {
 private:

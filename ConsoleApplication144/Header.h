@@ -50,15 +50,12 @@ public:
 };
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {
-private:
-    int EndAllElements; // Эта переменная не используется в текущей реализации End()
-
 public:
-    // Метод завершения программы через ввод в консоль цифры 7
-    void End(bool* endSession) { // теперь принимает указатель на bool
+    // Статический метод завершения программы через ввод в консоль цифры 7
+    static void End(bool* endSession) { // Статический метод
         int EndAll = 0;
         puts("Если хотите завершить работу видеопроигрывателя, нажмите 7: ");
-        scanf_s("%d", &EndAll);
+        scanf("%d", &EndAll);
         if (EndAll == 7) {
             puts("Завершение сеанса...");
             exit(0);
@@ -435,8 +432,8 @@ void Video::ChooseVid() {
         ButtonStopVid vid;
         vid.OnVid();
         bool endSession = false;
-        EndWork endWork;
-        endWork.End(&endSession);
+        bool sessionEnded = false;
+        EndWork::End(&sessionEnded);
         totalVideos--;
         puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
         scanf("%d", &VidPlayerOn);

@@ -257,8 +257,10 @@ class Video {
 private:
     char** LastVid;
     char** AllVid;
+    int N1;
+    int M1;
 public:
-    Video() {
+    Video(): N1(N1), M1(M1) {
         LastVid = new char* [N];
         AllVid = new char* [N];
         for (int i = 0; i < N; ++i) {
@@ -266,7 +268,43 @@ public:
             AllVid[i] = new char[M];
         }
         LastVids();
-    }; // Конструктор
+    }; 
+    Video(const Video& other) : N1(other.N1), M1(other.M1) { // Конструктор копирования
+        LastVid = new char*[N];
+        AllVid = new char*[N];
+        for (int i = 0; i < N; ++i) {
+            LastVid[i] = new char[M];
+            AllVid[i] = new char[M];
+            strcpy(LastVid[i], other.LastVid[i]);
+            strcpy(AllVid[i], other.AllVid[i]);
+        }
+    }
+
+    Video& operator=(const Video& other) { // Перегрузка оператора присваивания
+        if (this != &other) { // Проверка самоприсваивания
+            // Освобождение существующей памяти
+            for (int i = 0; i < N; ++i) {
+                delete[] LastVid[i];
+                delete[] AllVid[i];
+            }
+            delete[] LastVid;
+            delete[] AllVid;
+
+            // Выделение новой памяти и копирование данных
+            N1 = other.N1;
+            M1 = other.M1;
+            LastVid = new char*[N];
+            AllVid = new char*[N];
+            for (int i = 0; i < N; ++i) {
+                LastVid[i] = new char[M];
+                AllVid[i] = new char[M];
+                strcpy(LastVid[i], other.LastVid[i]);
+                strcpy(AllVid[i], other.AllVid[i]);
+            }
+        }
+        return *this;
+    }
+
     ~Video() {
         for (int i = 0; i < N; ++i) {
             delete[] LastVid[i];

@@ -55,11 +55,25 @@ public:
     static void End(bool* endSession) { // Статический метод
         int EndAll = 0;
         puts("Если хотите завершить работу видеопроигрывателя, нажмите 7: ");
-        scanf("%d", &EndAll);
-        if (EndAll == 7) {
-            puts("Завершение сеанса...");
-            exit(0);
-            *endSession = true; // устанавливаем флаг true через указатель
+        try {
+            if (scanf("%d", &EndAll) != 1) {
+                throw std::runtime_error("Ошибка ввода: Необходимо ввести целое число.");
+            }
+
+            if (EndAll == 7) {
+                puts("Завершение сеанса...");
+                exit(0);
+                *endSession = true;
+            }
+            else {
+                puts("Работа видеопроигрывателя продолжается.");
+            }
+        }
+        catch (const std::runtime_error& error) {
+            std::cerr << "Ошибка: " << error.what() << std::endl;
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Произошла неизвестная ошибка: " << e.what() << std::endl;
         }
     }
 };

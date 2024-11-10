@@ -69,29 +69,29 @@ public:
 //Класс звука для установки уровня громкости через ввод в консоль соответствующего числа от 0 до 100
 class Voice {
 private:
-    int Loud;
+    static int Loud; // Статическое поле для громкости
+
 public:
     // Метод для ввода численного значения громкости видео
-    int& VidVoice() { // Возвращает ссылку на Loud
-        int Loud = 0;
-        do{
-        printf("Введите уровень громкости (от 0 до 100): ");
-        if (scanf("%d", &Loud) != 1) {
-            printf("Ошибка: введите числовое значение.\n");
-            while (getchar() != '\n');
-            Loud = -1;
-        }
-        else if (Loud < 0 || Loud > 100) {
-            printf("Ошибка: уровень громкости должен быть в пределах от 0 до 100.\n");
-        }
-        else {
-            printf("Уровень громкости видео изменен до %d\n", Loud);
-        }
-    } while (Loud < 0 || Loud > 100);
-        return Loud; // Возвращаем ссылку на член данных Loud
+    static int VidVoice() { // Статический метод
+        do {
+            std::cout << "Введите уровень громкости (от 0 до 100): ";
+            if (std::cin >> Loud && Loud >= 0 && Loud <= 100) {
+                std::cout << "Уровень громкости видео изменен до " << Loud << std::endl;
+                return Loud;
+            }
+            else {
+                std::cout << "Ошибка: уровень громкости должен быть в пределах от 0 до 100. Попробуйте ещё раз.\n";
+                std::cin.clear(); 
+                std::cin.ignore(100, '\n'); 
+            }
+        } while (true);
     }
-    int getLoud() const { return Loud; } 
+
+    static int getLoud() { return Loud; }
 };
+
+int Voice::Loud = 0; // Инициализация статического поля
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
 private:
@@ -431,7 +431,7 @@ void Video::ChooseVid() {
         }
         printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
         Voice voice;
-        int& loudness = voice.VidVoice(); // Получаем ссылку на Loud
+        int loudness = voice.VidVoice(); // Получаем ссылку на Loud
         ButtonStopVid vid;
         vid.OnVid();
         bool endSession = false;

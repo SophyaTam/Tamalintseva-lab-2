@@ -52,7 +52,7 @@ public:
 class EndWork {
 public:
     // Статический метод завершения программы через ввод в консоль цифры 7
-    static void End(bool* endSession) { // Статический метод
+    static void End(bool* endSession) { // Статический метод, принимает указатель на булеву переменную
         int EndAll = 0;
         puts("Если хотите завершить работу видеопроигрывателя, нажмите 7: ");
         try {
@@ -63,7 +63,7 @@ public:
             if (EndAll == 7) {
                 puts("Завершение сеанса...");
                 exit(0);
-                *endSession = true;
+                *endSession = true;//  происходит возврат значения через указатель.
             }
             else {
                 puts("Работа видеопроигрывателя продолжается.");
@@ -101,7 +101,6 @@ public:
 
     static int getLoud() { return Loud; }
 };
-
 int Voice::Loud = 0; // Инициализация статического поля
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
@@ -188,38 +187,34 @@ public:
     void ShowAdv();
 };
 // Определение подкласса ButtonStopAdv
-class ButtonStopAdv : public Advert { //  ButtonStopAdv подклассо Advert
-private:
-    char StopAdv;
-    char AdvPlayerOn;
+class ButtonStopAdv : public Advert { // ButtonStopAdv подкласс Advert
 public:
     // Метод для остановки рекламы посредством ввода цифры 1
-    int StopAdvs() {
-        int StopAdv = 0;
+    void StopAdvs(int& StopAdv) { // Обратите внимание на ссылку перед параметром
         do {
             puts("Если хотите остановить видео, нажмите 1, иначе - 0");
             if (scanf("%d", &StopAdv) != 1) {
                 printf("Ошибка: введите числовое значение.\n");
-                while (getchar() != '\n');
-                StopAdv = -1;
+                while (getchar() != '\n'); // Очищаем буфер
+                StopAdv = -1; // Устанавливаем ошибочное значение
             }
             else if (StopAdv < 0 || StopAdv > 1) {
                 printf("Ошибка: Если хотите остановить видео, нажмите 1, иначе - 0.\n");
             }
         } while (StopAdv < 0 || StopAdv > 1);
+
         if (StopAdv == 1) {
             puts("Реклама остановлена");
         }
-        return StopAdv;
-    };
+    }
 
     // Метод для возобновления воспроизведения видео через ввод 1
     void OnAdv() {
         int StopAdv = 0;
         int AdvPlayerOn = 0;
 
-        while (1) {
-            StopAdv = StopAdvs();
+        while (true) {
+            StopAdvs(StopAdv); // Передаем ссылку
 
             if (StopAdv == 0) {
                 puts("Вы выбрали продолжить.");
@@ -231,7 +226,7 @@ public:
                 break;
             }
         }
-    };
+    }
 };
 // Метод для выбора рандомной рекламы и её воспроизведения
 void Advert::ShowAdv() {
@@ -466,7 +461,7 @@ private:
 public:
     VideoPlayer(int playtime) : playtime(playtime) {}
     VideoPlayer operator+(const VideoPlayer& other) const {
-        return VideoPlayer(playtime + other.playtime);
+        return VideoPlayer(playtime + other.playtime);// Возвращаем новый объект VideoPlayer, время воспроизведения которого равно сумме, времени воспроизведения текущего объекта и other
     }
     void printPlaytime() const {
         std::cout << "Время воспроизведения: " << playtime << " секунд" << std::endl;

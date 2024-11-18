@@ -104,7 +104,7 @@ public:
 int Voice::Loud = 0; // Инициализация статического поля
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
-private:
+protected: // Изменено на protected
     char TurnOnTheAdvert;
     int* AllAdvert;
     int* NamesAdd;
@@ -260,7 +260,7 @@ void Advert::ShowAdv() {
 }
 // Класс для выбора видео и его проигрывания
 class Video {
-private:
+protected:
     char** LastVid;
     char** AllVid;
     int N1;

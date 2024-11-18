@@ -163,12 +163,12 @@ public:
     };
 
     // Метод подключения рекламы для просмотра через ввод 1
-    int ChooseAdvert() {
+    virtual int ChooseAdvert() {  // Обратите внимание на ключевое слово virtual
         int Turn;
         puts("Введите 1, если хотите добавить рекламу и 0 - если нет: ");
         scanf("%d", &Turn);
         return Turn;
-    };
+    }
 
     // Метод добавления названий рекламы в массив
     void NameAd() {
@@ -189,6 +189,18 @@ public:
 // Определение подкласса ButtonStopAdv
 class ButtonStopAdv : public Advert { // ButtonStopAdv подкласс Advert
 public:
+    int ChooseAdvert() override {
+        // Вызов метода базового класса
+        int baseChoice = Advert::ChooseAdvert(); // Вызов метода базового класса
+        // Дополнительная логика для производного класса
+        if (baseChoice == 1) {
+            puts("Реклама была добавлена через производный класс.");
+        }
+        else {
+            puts("Реклама не была добавлена через производный класс.");
+        }
+        return baseChoice;
+    }
     // Метод для остановки рекламы посредством ввода цифры 1
     void StopAdvs(int& StopAdv) { // Обратите внимание на ссылку перед параметром
         do {

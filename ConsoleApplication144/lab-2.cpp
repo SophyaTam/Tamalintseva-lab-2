@@ -31,9 +31,9 @@ int main()
 
     int vectorSize = 5; // Задайте нужный размер векторов
     Advert* advert = new Advert();
-    Video* video = new Video();
     advert->ShowAdv(); 
-    video->ChooseVid();
+    ButtonStopVid player;
+    player.ChooseVid();
   
 
     // Освобождение динамически выделенной памяти
@@ -42,8 +42,7 @@ int main()
     delete[] LastVid;         
     delete[] AllAdvert;       
     delete[] LastAdvert;      
-    delete advert;            
-    delete video;             
+    delete advert;                        
 
     return 0;
 }

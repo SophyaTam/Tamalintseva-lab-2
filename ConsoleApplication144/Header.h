@@ -355,8 +355,8 @@ public:
             LastVid[i][0] = '\0';
         }
     };
-    void ChooseVid();
     friend int chooseRandomVideo(Video& video); // Объявление дружественной функции
+    virtual void ChooseVid()=0;
 };
 //Дружественная функция для выбора случайного видео
 int chooseRandomVideo(Video& video) {
@@ -418,54 +418,53 @@ public:
             }
         }
     };
-};
-// Метод для вывода рандомного видео
-void Video::ChooseVid() {
-    char VidPlayerOn = 0, totalVideos = 3;
-    OpenVid();
-    while (1) {
-        if (totalVideos == 0) {
-            printf("Нет доступных видео для воспроизведения!\n");
-            break;
-        }
-        int randomIndex;
-        int Allow;
-        do {
-            randomIndex = rand() % totalVideos;
-            Allow = 1;
+    void ChooseVid() override {
+        char VidPlayerOn = 0, totalVideos = 3;
+        OpenVid();
+        while (1) {
+            if (totalVideos == 0) {
+                printf("Нет доступных видео для воспроизведения!\n");
+                break;
+            }
+            int randomIndex;
+            int Allow;
+            do {
+                randomIndex = rand() % totalVideos;
+                Allow = 1;
+                for (int i = 0; i < N; i++) {
+                    if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
+                        Allow = 0;
+                        break;
+                    }
+                }
+            } while (Allow == 0);
+
             for (int i = 0; i < N; i++) {
-                if (strcmp(AllVid[randomIndex], LastVid[i]) == 0) {
-                    Allow = 0;
+                if (LastVid[i][0] == '\0') {
+                    strcpy(LastVid[i], AllVid[randomIndex]);
                     break;
                 }
             }
-        } while (Allow == 0);
-
-        for (int i = 0; i < N; i++) {
-            if (LastVid[i][0] == '\0') {
-                strcpy(LastVid[i], AllVid[randomIndex]);
+            printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
+            Voice voice;
+            int loudness = voice.VidVoice(); // Получаем ссылку на Loud
+            ButtonStopVid vid;
+            vid.OnVid();
+            bool endSession = false;
+            bool sessionEnded = false;
+            EndWork::End(&sessionEnded);
+            totalVideos--;
+            puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
+            scanf("%d", &VidPlayerOn);
+            if (VidPlayerOn == 1) {
                 break;
             }
         }
-        printf("Воспроизводится видео: %s........\n", AllVid[randomIndex]);
-        Voice voice;
-        int loudness = voice.VidVoice(); // Получаем ссылку на Loud
-        ButtonStopVid vid;
-        vid.OnVid();
-        bool endSession = false;
-        bool sessionEnded = false;
-        EndWork::End(&sessionEnded);
-        totalVideos--;
-        puts("Если вы хотите выйти из плеера, нажмите 1, иначе - 0");
-        scanf("%d", &VidPlayerOn);
         if (VidPlayerOn == 1) {
-            break;
+            ChooseVid();
         }
     }
-    if (VidPlayerOn == 1) {
-        ChooseVid();
-    }
-}
+};
 //Формальный класс видеопроигрывателя как объекта курсового проета
 class VideoPlayer {
 private:

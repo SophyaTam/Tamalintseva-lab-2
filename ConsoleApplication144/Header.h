@@ -103,6 +103,7 @@ public:
 };
 int Voice::Loud = 0; // Инициализация статического поля
 //Класс для возможности приостановки рекламы через команды 0 и 1
+//Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
 protected: // Изменено на protected
     char TurnOnTheAdvert;
@@ -111,13 +112,14 @@ protected: // Изменено на protected
     int* LastAdvert;
 
 public:
-    Advert() {
+    Advert(int size) {
         AllAdvert = new int[N];
         NamesAdd = new int[N];
         LastAdvert = new int[N];
         LastAdverts();
     };
-
+    // Конструктор по умолчанию
+    Advert() : Advert(N) {} // Использует конструктор с параметром по умолчанию
     // Копирующий конструктор
     Advert(const Advert& other) {
         AllAdvert = new int[N];
@@ -186,13 +188,16 @@ public:
 
     void ShowAdv();
 };
+
 // Определение подкласса ButtonStopAdv
-class ButtonStopAdv : public Advert { // ButtonStopAdv подкласс Advert
+class ButtonStopAdv : public Advert {
 public:
+    // Конструктор производного класса с параметром
+    ButtonStopAdv(int size) : Advert(size) {} // Вызов конструктора базового класса с параметром
+
+    // Оверрайд метода
     int ChooseAdvert() override {
-        // Вызов метода базового класса
         int baseChoice = Advert::ChooseAdvert(); // Вызов метода базового класса
-        // Дополнительная логика для производного класса
         if (baseChoice == 1) {
             puts("Реклама была добавлена через производный класс.");
         }
@@ -201,17 +206,17 @@ public:
         }
         return baseChoice;
     }
-    // Метод для остановки рекламы посредством ввода цифры 1
-    void StopAdvs(int& StopAdv) { // Обратите внимание на ссылку перед параметром
+
+    void StopAdvs(int& StopAdv) {
         do {
             puts("Если хотите остановить видео, нажмите 1, иначе - 0");
             if (scanf("%d", &StopAdv) != 1) {
                 printf("Ошибка: введите числовое значение.\n");
-                while (getchar() != '\n'); // Очищаем буфер
-                StopAdv = -1; // Устанавливаем ошибочное значение
+                while (getchar() != '\n'); // очищаем буфер ввода
+                StopAdv = -1; // устанавливаем ошибочное значение
             }
             else if (StopAdv < 0 || StopAdv > 1) {
-                printf("Ошибка: Если хотите остановить видео, нажмите 1, иначе - 0.\n");
+                printf("Ошибка: Если хотите остановить рекламу, нажмите 1, иначе - 0.\n");
             }
         } while (StopAdv < 0 || StopAdv > 1);
 
@@ -219,12 +224,8 @@ public:
             puts("Реклама остановлена");
         }
     }
-
-    // Метод для возобновления воспроизведения видео через ввод 1
     void OnAdv() {
-        int StopAdv = 0;
-        int AdvPlayerOn = 0;
-
+        int StopAdv = 0; // Инициализация
         while (true) {
             StopAdvs(StopAdv); // Передаем ссылку
 
@@ -233,6 +234,7 @@ public:
                 break;
             }
             puts("Для дальнейшего просмотра нажмите 1");
+            int AdvPlayerOn;
             scanf("%d", &AdvPlayerOn);
             if (AdvPlayerOn == 1) {
                 break;
@@ -260,7 +262,7 @@ void Advert::ShowAdv() {
             }
         } while (!Allow);
         printf("Играет реклама: #%d........\n", NamesAdd[randomIndex]);
-        ButtonStopAdv adv;
+        ButtonStopAdv adv(1);
         adv.OnAdv();
         for (int i = 0; i < N; i++) {
             if (LastAdvert[i] == 0) {

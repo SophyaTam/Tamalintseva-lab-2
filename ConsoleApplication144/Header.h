@@ -105,36 +105,40 @@ int Voice::Loud = 0; // Инициализация статического поля
 //Класс для возможности приостановки рекламы через команды 0 и 1
 //Класс для возможности приостановки рекламы через команды 0 и 1
 class Advert {
-protected: // Изменено на protected
+protected:
     char TurnOnTheAdvert;
     int* AllAdvert;
     int* NamesAdd;
     int* LastAdvert;
+    int size; 
 
 public:
-    Advert(int size) {
-        AllAdvert = new int[N];
-        NamesAdd = new int[N];
-        LastAdvert = new int[N];
+    // Конструктор с параметрами
+    Advert(int size) : size(size) { 
+        AllAdvert = new int[size];
+        NamesAdd = new int[size];
+        LastAdvert = new int[size];
         LastAdverts();
-    };
+    }
+
     // Конструктор по умолчанию
-    Advert() : Advert(N) {} // Использует конструктор с параметром по умолчанию
+    Advert() : Advert(N) {}
+
     // Копирующий конструктор
-    Advert(const Advert& other) {
-        AllAdvert = new int[N];
-        NamesAdd = new int[N];
-        LastAdvert = new int[N];
+    Advert(const Advert& other) : size(other.size) { // Инициализация члена size из другого объекта
+        AllAdvert = new int[size];
+        NamesAdd = new int[size];
+        LastAdvert = new int[size];
         TurnOnTheAdvert = other.TurnOnTheAdvert;
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < size; i++) { // Используйте size
             AllAdvert[i] = other.AllAdvert[i];
             NamesAdd[i] = other.NamesAdd[i];
             LastAdvert[i] = other.LastAdvert[i];
         }
     }
 
-    // Перезагрузка оператора присваивания
+    // Перегрузка оператора присваивания
     Advert& operator=(const Advert& other) {
         if (this != &other) {
             // Освобождение текущей памяти
@@ -142,14 +146,14 @@ public:
             delete[] NamesAdd;
             delete[] LastAdvert;
 
-            // Выделение новой памяти
-            AllAdvert = new int[N];
-            NamesAdd = new int[N];
-            LastAdvert = new int[N];
+            size = other.size; 
+            AllAdvert = new int[size];
+            NamesAdd = new int[size];
+            LastAdvert = new int[size];
             TurnOnTheAdvert = other.TurnOnTheAdvert;
 
             // Копирование данных
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < size; i++) { 
                 AllAdvert[i] = other.AllAdvert[i];
                 NamesAdd[i] = other.NamesAdd[i];
                 LastAdvert[i] = other.LastAdvert[i];
@@ -158,14 +162,15 @@ public:
         return *this;
     }
 
+    // Деструктор
     ~Advert() {
         delete[] AllAdvert;
         delete[] NamesAdd;
         delete[] LastAdvert;
-    };
+    }
 
     // Метод подключения рекламы для просмотра через ввод 1
-    virtual int ChooseAdvert() {  // Обратите внимание на ключевое слово virtual
+    virtual int ChooseAdvert() {
         int Turn;
         puts("Введите 1, если хотите добавить рекламу и 0 - если нет: ");
         scanf("%d", &Turn);
@@ -174,15 +179,15 @@ public:
 
     // Метод добавления названий рекламы в массив
     void NameAd() {
-        for (int i = 0; i < N; i++) {
-            NamesAdd[i] = i + 1; // Заполнение массива с названиями
+        for (int i = 0; i < size; i++) { 
+            NamesAdd[i] = i + 1;
         }
     };
 
     // Метод заполнения массива с уже проигранной рекламой
     void LastAdverts() {
-        for (int i = 0; i < N; i++) {
-            LastAdvert[i] = 0; // Инициализация не воспроизводимой рекламы
+        for (int i = 0; i < size; i++) { 
+            LastAdvert[i] = 0; 
         }
     };
 
@@ -206,14 +211,20 @@ public:
         }
         return baseChoice;
     }
+    ButtonStopAdv& operator=(const ButtonStopAdv& other) {
+        if (this != &other) {
+            Advert::operator=(other); // Вызов оператора базового класса
+        }
+        return *this;
+    }
 
     void StopAdvs(int& StopAdv) {
         do {
             puts("Если хотите остановить видео, нажмите 1, иначе - 0");
             if (scanf("%d", &StopAdv) != 1) {
                 printf("Ошибка: введите числовое значение.\n");
-                while (getchar() != '\n'); // очищаем буфер ввода
-                StopAdv = -1; // устанавливаем ошибочное значение
+                while (getchar() != '\n'); 
+                StopAdv = -1; 
             }
             else if (StopAdv < 0 || StopAdv > 1) {
                 printf("Ошибка: Если хотите остановить рекламу, нажмите 1, иначе - 0.\n");
@@ -225,9 +236,9 @@ public:
         }
     }
     void OnAdv() {
-        int StopAdv = 0; // Инициализация
+        int StopAdv = 0; 
         while (true) {
-            StopAdvs(StopAdv); // Передаем ссылку
+            StopAdvs(StopAdv); 
 
             if (StopAdv == 0) {
                 puts("Вы выбрали продолжить.");
@@ -242,6 +253,7 @@ public:
         }
     }
 };
+
 // Метод для выбора рандомной рекламы и её воспроизведения
 void Advert::ShowAdv() {
     int TurnOn = ChooseAdvert();

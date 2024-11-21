@@ -21,7 +21,7 @@ public:
         AddOptions();
     }
 
-    void AddOptions() {
+    virtual void AddOptions() {
         AvailableOptions.push_back("Детское");
         AvailableOptions.push_back("Детективы");
         AvailableOptions.push_back("Комедии");
@@ -170,11 +170,23 @@ public:
     }
 
     // Метод подключения рекламы для просмотра через ввод 1
+    // Виртуальная функция
     virtual int ChooseAdvert() {
         int Turn;
-        puts("Введите 1, если хотите добавить рекламу и 0 - если нет: ");
-        scanf("%d", &Turn);
+        std::cout << "Введите 1, если хотите добавить рекламу и 0 - если нет: ";
+        std::cin >> Turn;
         return Turn;
+    }
+
+    // Не виртуальная функция, которая вызывает виртуальную
+    void CallChooseAdvert() {
+        int choice = ChooseAdvert(); // Вызов виртуальной функции
+        if (choice == 1) {
+            std::cout << "Реклама была добавлена через базовый класс." << std::endl;
+        }
+        else {
+            std::cout << "Реклама не была добавлена через базовый класс." << std::endl;
+        }
     }
 
     // Метод добавления названий рекламы в массив
@@ -200,14 +212,14 @@ public:
     // Конструктор производного класса с параметром
     ButtonStopAdv(int size) : Advert(size) {} // Вызов конструктора базового класса с параметром
 
-    // Оверрайд метода
+// Переопределение виртуальной функции
     int ChooseAdvert() override {
         int baseChoice = Advert::ChooseAdvert(); // Вызов метода базового класса
         if (baseChoice == 1) {
-            puts("Реклама была добавлена через производный класс.");
+            std::cout << "Реклама была добавлена через производный класс." << std::endl;
         }
         else {
-            puts("Реклама не была добавлена через производный класс.");
+            std::cout << "Реклама не была добавлена через производный класс." << std::endl;
         }
         return baseChoice;
     }

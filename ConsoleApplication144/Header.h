@@ -205,7 +205,6 @@ public:
 
     void ShowAdv();
 };
-
 // Определение подкласса ButtonStopAdv
 class ButtonStopAdv : public Advert {
 public:
@@ -265,7 +264,6 @@ public:
         }
     }
 };
-
 // Метод для выбора рандомной рекламы и её воспроизведения
 void Advert::ShowAdv() {
     int TurnOn = ChooseAdvert();
@@ -382,7 +380,12 @@ public:
         }
     };
     friend int chooseRandomVideo(Video& video); // Объявление дружественной функции
-    virtual void ChooseVid()=0;
+    // Не виртуальная функция, которая вызывает виртуальную функцию
+    void CallChooseVid() {
+        ChooseVid(); // Вызов виртуальной функции
+    }
+
+    virtual void ChooseVid() = 0; // Чисто виртуальная функция
 };
 //Дружественная функция для выбора случайного видео
 int chooseRandomVideo(Video& video) {

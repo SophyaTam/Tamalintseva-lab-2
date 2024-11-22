@@ -12,7 +12,13 @@
 #define M 200
 //Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
 //Представляет собой список доступных жанров
-class MainMenu {
+class Menu {
+public:
+    virtual void AddOptions() = 0; // Чисто виртуальная функция для добавления опций
+    virtual int ChooseOptions() = 0; // Чисто виртуальная функция для выбора опции
+    virtual ~Menu() {} // Виртуальный деструктор
+};
+class MainMenu: public Menu {
 private:
     std::vector<std::string> AvailableOptions;
 
@@ -21,7 +27,7 @@ public:
         AddOptions();
     }
 
-    virtual void AddOptions() {
+    void AddOptions() override {
         AvailableOptions.push_back("Детское");
         AvailableOptions.push_back("Детективы");
         AvailableOptions.push_back("Комедии");
@@ -29,17 +35,17 @@ public:
         AvailableOptions.push_back("Сериалы");
     }
 
-    int ChooseOptions() {
+    int ChooseOptions() override {
         int Djanre = 0;
         for (size_t i = 0; i < AvailableOptions.size(); ++i) {
-            std::cout << i + 1 << ". " << AvailableOptions[i] << std::endl; 
+            std::cout << i + 1 << ". " << AvailableOptions[i] << std::endl;
         }
         std::cout << "Выберите желаемое направление (1-" << AvailableOptions.size() << "): ";
         while (true) {
             if (!(std::cin >> Djanre) || Djanre < 1 || Djanre > AvailableOptions.size()) {
                 std::cout << "Неверный ввод! Пожалуйста, введите число от 1 до " << AvailableOptions.size() << "." << std::endl;
-                std::cin.clear(); 
-                std::cin.ignore(256, '\n'); 
+                std::cin.clear();
+                std::cin.ignore(256, '\n');
             }
             else {
                 break;
@@ -266,6 +272,9 @@ public:
 };
 // Метод для выбора рандомной рекламы и её воспроизведения
 void Advert::ShowAdv() {
+    Advert* ad = new ButtonStopAdv(N); // Динамическое создание объекта производного класса
+    // Вызов метода, который использует виртуальную функцию
+    ad->CallChooseAdvert();
     int TurnOn = ChooseAdvert();
     NameAd();
     LastAdverts();
@@ -357,8 +366,9 @@ public:
     }; // Деструктор
     // Метод для заполнения массива с названиями видео для просмотра
     void OpenVid() {
-        MainMenu menu;
-        int Djanre = menu.ChooseOptions();
+        Menu* menu = new MainMenu(); 
+        int Djanre = menu->ChooseOptions(); 
+        std::cout << "Вы выбрали опцию: " << Djanre << std::endl;
         char filename[M];
         snprintf(filename, M, "%d.txt", Djanre);
         FILE* file = fopen(filename, "r");

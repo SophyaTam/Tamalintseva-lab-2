@@ -10,15 +10,78 @@
 #define M 200
 //Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
 //Представляет собой список доступных жанров
+// Базовый класс для опций меню
+class MenuOption {
+public:
+    virtual std::string GetName() const = 0; // Чисто виртуальная функция для получения имени опции
+    virtual ~MenuOption() {} // Виртуальный деструктор
+};
+
+// Производные классы для различных типов опций
+class ChildOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Детское";
+    }
+};
+
+class DetectiveOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Детективы";
+    }
+};
+
+class ComedyOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Комедии";
+    }
+};
+
+class MelodramaOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Мелодраммы";
+    }
+};
+
+class SeriesOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Сериалы";
+    }
+};
+
+// Контейнер для хранения опций меню
+class MenuOptionsContainer {
+private:
+    std::vector<std::unique_ptr<MenuOption>> options;
+
+public:
+    void AddOption(std::unique_ptr<MenuOption> option) {
+        options.push_back(std::move(option));
+    }
+
+    const std::vector<std::unique_ptr<MenuOption>>& GetOptions() const {
+        return options;
+    }
+
+    size_t Size() const {
+        return options.size();
+    }
+};
+
 class Menu {
 public:
     virtual void AddOptions() = 0; // Чисто виртуальная функция для добавления опций
     virtual int ChooseOptions() = 0; // Чисто виртуальная функция для выбора опции
     virtual ~Menu() {} // Виртуальный деструктор
 };
-class MainMenu: public Menu {
+
+class MainMenu : public Menu {
 private:
-    std::vector<std::string> AvailableOptions;
+    MenuOptionsContainer AvailableOptions; // Используем контейнер для опций
 
 public:
     MainMenu() {
@@ -26,22 +89,23 @@ public:
     }
 
     void AddOptions() override {
-        AvailableOptions.push_back("Детское");
-        AvailableOptions.push_back("Детективы");
-        AvailableOptions.push_back("Комедии");
-        AvailableOptions.push_back("Мелодраммы");
-        AvailableOptions.push_back("Сериалы");
+        AvailableOptions.AddOption(std::make_unique<ChildOption>());
+        AvailableOptions.AddOption(std::make_unique<DetectiveOption>());
+        AvailableOptions.AddOption(std::make_unique<ComedyOption>());
+        AvailableOptions.AddOption(std::make_unique<MelodramaOption>());
+        AvailableOptions.AddOption(std::make_unique<SeriesOption>());
     }
 
     int ChooseOptions() override {
         int Djanre = 0;
-        for (size_t i = 0; i < AvailableOptions.size(); ++i) {
-            std::cout << i + 1 << ". " << AvailableOptions[i] << std::endl;
+        const auto& options = AvailableOptions.GetOptions();
+        for (size_t i = 0; i < options.size(); ++i) {
+            std::cout << i + 1 << ". " << options[i]->GetName() << std::endl;
         }
-        std::cout << "Выберите желаемое направление (1-" << AvailableOptions.size() << "): ";
+        std::cout << "Выберите желаемое направление (1-" << options.size() << "): ";
         while (true) {
-            if (!(std::cin >> Djanre) || Djanre < 1 || Djanre > AvailableOptions.size()) {
-                std::cout << "Неверный ввод! Пожалуйста, введите число от 1 до " << AvailableOptions.size() << "." << std::endl;
+            if (!(std::cin >> Djanre) || Djanre < 1 || Djanre > options.size()) {
+                std::cout << "Неверный ввод! Пожалуйста, введите число от 1 до " << options.size() << "." << std::endl;
                 std::cin.clear();
                 std::cin.ignore(256, '\n');
             }
@@ -51,7 +115,6 @@ public:
         }
         return Djanre;
     }
-    const std::vector<std::string>& GetOptions() const {return AvailableOptions;} //Контейнер для хранения меню
 };
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {
@@ -506,7 +569,7 @@ public:
 //Формальный класс видеопроигрывателя как объекта курсового проета
 class VideoPlayer {
 private:
-    std::vector<std::unique_ptr<Menu>> menus;
+    int playtime;
 public:
     VideoPlayer(int playtime) : playtime(playtime) {}
     VideoPlayer operator+(const VideoPlayer& other) const {

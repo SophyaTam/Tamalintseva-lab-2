@@ -22,14 +22,6 @@ int main()
 
     int Djanre = 0, Turn = 0, Back = 0;
 
-    // Динамическое выделение объектов классов Advert и Video
-    VideoPlayer video1(120);
-    VideoPlayer video2 = video1; // Конструктор копирования вызывается
-    VideoPlayer video3(60);
-    VideoPlayer video4 = video2 + video3;
-    video4.printPlaytime(); 
-
-    int vectorSize = 5; // Задайте нужный размер векторов
     Advert* advert = new Advert();
     advert->ShowAdv(); 
     ButtonStopVid player;

@@ -14,7 +14,7 @@ int main()
     setlocale(LC_ALL, "Russian");
 
    // Память для массива видео
-    char(*AvailableOptions)[M] = new char[N][M];
+   /* char(*AvailableOptions)[M] = new char[N][M];
     char(*AllVid)[M] = new char[N][M];
     char(*LastVid)[M] = new char[N][M];
     int* AllAdvert = new int[N];
@@ -36,6 +36,10 @@ int main()
     delete[] LastAdvert;      
     delete advert;                        
 
+    return 0;*/
+    MainMenu menu;
+    menu.ChooseOptions(); // Выбор опции
+    menu.SearchOption("Детективы"); // Пример поиска опции
     return 0;
 }
 

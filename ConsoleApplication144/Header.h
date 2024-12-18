@@ -10,6 +10,12 @@
 #define M 200
 //Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
 //Представляет собой список доступных жанров
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <algorithm>
+#include <string>
+
 // Базовый класс для опций меню
 class MenuOption {
 public:
@@ -18,6 +24,13 @@ public:
 };
 
 // Производные классы для различных типов опций
+class MelodramaOption : public MenuOption {
+public:
+    std::string GetName() const override {
+        return "Мелодраммы";
+    }
+}; 
+
 class ChildOption : public MenuOption {
 public:
     std::string GetName() const override {
@@ -36,13 +49,6 @@ class ComedyOption : public MenuOption {
 public:
     std::string GetName() const override {
         return "Комедии";
-    }
-};
-
-class MelodramaOption : public MenuOption {
-public:
-    std::string GetName() const override {
-        return "Мелодраммы";
     }
 };
 
@@ -70,6 +76,23 @@ public:
     size_t Size() const {
         return options.size();
     }
+
+    // Метод для сортировки опций по имени
+    void SortOptions() {
+        std::sort(options.begin(), options.end(),
+            [](const std::unique_ptr<MenuOption>& a, const std::unique_ptr<MenuOption>& b) {
+                return a->GetName() < b->GetName();
+            });
+    }
+
+    // Метод для поиска опции по имени
+    MenuOption* FindOption(const std::string& name) const {
+        auto it = std::find_if(options.begin(), options.end(),
+            [&name](const std::unique_ptr<MenuOption>& option) {
+                return option->GetName() == name;
+            });
+        return (it != options.end()) ? it->get() : nullptr; // Возвращаем указатель на найденный объект или nullptr
+    }
 };
 
 class Menu {
@@ -86,6 +109,7 @@ private:
 public:
     MainMenu() {
         AddOptions();
+        AvailableOptions.SortOptions(); // Сортируем опции при инициализации
     }
 
     void AddOptions() override {
@@ -114,6 +138,41 @@ public:
             }
         }
         return Djanre;
+    }
+
+    //Метод для поиска опции по имени
+        void SearchOption(const std::string& name) {
+        MenuOption* option = AvailableOptions.FindOption(name);
+        if (option) {
+            std::cout << "Опция '" << name << "' найдена! Она содержит: " << std::endl;
+            const char* filename = nullptr; // Указатель на имя файла
+
+            // Присваиваем имя файла в зависимости от опции
+            if (name == "Детское") filename = "1.txt";
+            else if (name == "Детективы") filename = "2.txt";
+            else if (name == "Комедии") filename = "3.txt";
+            else if (name == "Мелодрамы") filename = "4.txt";
+            else if (name == "Сериалы") filename = "5.txt";
+
+            // Проверяем, был ли выбран файл
+            if (filename) {
+                FILE* file = fopen(filename, "r");
+                if (file == NULL) {
+                    perror("Ошибка открытия файла");
+                    return;
+                }
+
+                char point[30];
+                while (fgets(point, M, file) != NULL) {
+                    point[strcspn(point, "\n")] = '\0'; // Удаляем символ новой строки
+                    std::cout << point << std::endl; // Выводим содержимое строки
+                }
+                fclose(file);
+            }
+        }
+        else {
+            std::cout << "Опция '" << name << "' не найдена." << std::endl;
+        }
     }
 };
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму

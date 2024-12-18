@@ -2,10 +2,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <Windows.h>
-#include <stdio.h>
 #include <conio.h>
 #include <limits>
-#include <iostream>
 #include <vector>
 #include <string>
 #define N 200
@@ -53,6 +51,7 @@ public:
         }
         return Djanre;
     }
+    const std::vector<std::string>& GetOptions() const {return AvailableOptions;} //Контейнер для хранения меню
 };
 //Кнопка для полного закрытия программы при нажатии на которую заканчивает работу консольное приложение, а в графическом приложении будет закрывать форму
 class EndWork {

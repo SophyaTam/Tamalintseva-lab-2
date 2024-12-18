@@ -506,7 +506,7 @@ public:
 //Формальный класс видеопроигрывателя как объекта курсового проета
 class VideoPlayer {
 private:
-    int playtime;
+    std::vector<std::unique_ptr<Menu>> menus;
 public:
     VideoPlayer(int playtime) : playtime(playtime) {}
     VideoPlayer operator+(const VideoPlayer& other) const {

@@ -10,11 +10,8 @@
 #define M 200
 //Класс для описания главного меню в котором пользователи будут выбирать направление для просмотра посредством нажатия соответствующей цифры
 //Представляет собой список доступных жанров
-#include <iostream>
-#include <vector>
 #include <memory>
 #include <algorithm>
-#include <string>
 
 // Базовый класс для опций меню
 class MenuOption {
@@ -395,7 +392,6 @@ public:
 void Advert::ShowAdv() {
     Advert* ad = new ButtonStopAdv(N); // Динамическое создание объекта производного класса
     // Вызов метода, который использует виртуальную функцию
-    ad->CallChooseAdvert();
     int TurnOn = ChooseAdvert();
     NameAd();
     LastAdverts();

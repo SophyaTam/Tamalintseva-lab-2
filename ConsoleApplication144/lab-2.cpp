@@ -14,13 +14,18 @@ int main()
     setlocale(LC_ALL, "Russian");
 
    // Память для массива видео
-   /* char(*AvailableOptions)[M] = new char[N][M];
+   char(*AvailableOptions)[M] = new char[N][M];
     char(*AllVid)[M] = new char[N][M];
     char(*LastVid)[M] = new char[N][M];
     int* AllAdvert = new int[N];
     int* LastAdvert = new int[N];
 
     int Djanre = 0, Turn = 0, Back = 0;
+    MainMenu menu;
+    std::string filename; // Строка для имени файла
+    std::cout << "Введите имя файла для поиска опции: ";
+    std::getline(std::cin, filename); // Считываем имя файла
+    menu.SearchOption(filename); // Пример поиска опции
 
     Advert* advert = new Advert();
     advert->ShowAdv(); 
@@ -35,11 +40,6 @@ int main()
     delete[] AllAdvert;       
     delete[] LastAdvert;      
     delete advert;                        
-
-    return 0;*/
-    MainMenu menu;
-    menu.ChooseOptions(); // Выбор опции
-    menu.SearchOption("Детективы"); // Пример поиска опции
     return 0;
 }
 

@@ -131,7 +131,12 @@
     <ClCompile Include="lab-2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="VideoPlayer.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="Advert.h" />
+    <ClInclude Include="Video.h" />
+    <ClInclude Include="Voice.h" />
+    <ClInclude Include="MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram5.cd" />

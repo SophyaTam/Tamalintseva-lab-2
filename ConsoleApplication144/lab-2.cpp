@@ -2,9 +2,13 @@
 #include <iostream>
 #include <stdio.h>
 #include <Windows.h>
-#include <stdio.h>
 #include <conio.h>
-#include "Header.h"
+#include "Videoplayer.h"
+#include "Exit.h"
+#include "Advert.h"
+#include "Video.h"
+#include "Voice.h"
+#include "MainMenu.h"
 #define N 200
 #define M 200
 int main()

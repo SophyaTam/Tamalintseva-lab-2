@@ -19,7 +19,6 @@ public:
     virtual std::string GetName() const = 0; // Чисто виртуальная функция для получения имени опции
     virtual ~MenuOption() {} // Виртуальный деструктор
 };
-
 // Производные классы для различных типов опций
 class MelodramaOption : public MenuOption {
 public:
@@ -27,35 +26,30 @@ public:
         return "Мелодраммы";
     }
 }; 
-
 class ChildOption : public MenuOption {
 public:
     std::string GetName() const override {
         return "Детское";
     }
 };
-
 class DetectiveOption : public MenuOption {
 public:
     std::string GetName() const override {
         return "Детективы";
     }
 };
-
 class ComedyOption : public MenuOption {
 public:
     std::string GetName() const override {
         return "Комедии";
     }
 };
-
 class SeriesOption : public MenuOption {
 public:
     std::string GetName() const override {
         return "Сериалы";
     }
 };
-
 // Контейнер для хранения опций меню
 class MenuOptionsContainer {
 private:
@@ -91,14 +85,12 @@ public:
         return (it != options.end()) ? it->get() : nullptr; // Возвращаем указатель на найденный объект или nullptr
     }
 };
-
 class Menu {
 public:
     virtual void AddOptions() = 0; // Чисто виртуальная функция для добавления опций
     virtual int ChooseOptions() = 0; // Чисто виртуальная функция для выбора опции
     virtual ~Menu() {} // Виртуальный деструктор
 };
-
 class MainMenu : public Menu {
 private:
     MenuOptionsContainer AvailableOptions; // Используем контейнер для опций
@@ -231,17 +223,14 @@ int Voice::Loud = 0; // Инициализация статического поля
 class Advert {
 protected:
     char TurnOnTheAdvert;
-    int* AllAdvert;
-    int* NamesAdd;
-    int* LastAdvert;
-    int size; 
+    std::vector<int> AllAdvert;
+    std::vector<int> NamesAdd;
+    std::vector<int> LastAdvert;
+    int size;
 
 public:
     // Конструктор с параметрами
-    Advert(int size) : size(size) { 
-        AllAdvert = new int[size];
-        NamesAdd = new int[size];
-        LastAdvert = new int[size];
+    Advert(int size) : AllAdvert(size), NamesAdd(size), LastAdvert(size), size(size) {
         LastAdverts();
     }
 
@@ -249,52 +238,30 @@ public:
     Advert() : Advert(N) {}
 
     // Копирующий конструктор
-    Advert(const Advert& other) : size(other.size) { // Инициализация члена size из другого объекта
-        AllAdvert = new int[size];
-        NamesAdd = new int[size];
-        LastAdvert = new int[size];
-        TurnOnTheAdvert = other.TurnOnTheAdvert;
-
-        for (int i = 0; i < size; i++) { // Используйте size
-            AllAdvert[i] = other.AllAdvert[i];
-            NamesAdd[i] = other.NamesAdd[i];
-            LastAdvert[i] = other.LastAdvert[i];
-        }
+    Advert(const Advert& other)
+        : TurnOnTheAdvert(other.TurnOnTheAdvert),
+        AllAdvert(other.AllAdvert),
+        NamesAdd(other.NamesAdd),
+        LastAdvert(other.LastAdvert),
+        size(other.size) {
     }
 
     // Перегрузка оператора присваивания
     Advert& operator=(const Advert& other) {
         if (this != &other) {
-            // Освобождение текущей памяти
-            delete[] AllAdvert;
-            delete[] NamesAdd;
-            delete[] LastAdvert;
-
-            size = other.size; 
-            AllAdvert = new int[size];
-            NamesAdd = new int[size];
-            LastAdvert = new int[size];
             TurnOnTheAdvert = other.TurnOnTheAdvert;
-
-            // Копирование данных
-            for (int i = 0; i < size; i++) { 
-                AllAdvert[i] = other.AllAdvert[i];
-                NamesAdd[i] = other.NamesAdd[i];
-                LastAdvert[i] = other.LastAdvert[i];
-            }
+            AllAdvert = other.AllAdvert;
+            NamesAdd = other.NamesAdd;
+            LastAdvert = other.LastAdvert;
+            size = other.size;
         }
         return *this;
     }
 
     // Деструктор
-    ~Advert() {
-        delete[] AllAdvert;
-        delete[] NamesAdd;
-        delete[] LastAdvert;
-    }
+    virtual ~Advert() = default;
 
     // Метод подключения рекламы для просмотра через ввод 1
-    // Виртуальная функция
     virtual int ChooseAdvert() {
         int Turn;
         std::cout << "Введите 1, если хотите добавить рекламу и 0 - если нет: ";
@@ -302,9 +269,8 @@ public:
         return Turn;
     }
 
-    // Не виртуальная функция, которая вызывает виртуальную
     void CallChooseAdvert() {
-        int choice = ChooseAdvert(); // Вызов виртуальной функции
+        int choice = ChooseAdvert();
         if (choice == 1) {
             std::cout << "Реклама была добавлена через базовый класс." << std::endl;
         }
@@ -313,31 +279,27 @@ public:
         }
     }
 
-    // Метод добавления названий рекламы в массив
     void NameAd() {
-        for (int i = 0; i < size; i++) { 
+        for (int i = 0; i < size; i++) {
             NamesAdd[i] = i + 1;
         }
-    };
+    }
 
-    // Метод заполнения массива с уже проигранной рекламой
     void LastAdverts() {
-        for (int i = 0; i < size; i++) { 
-            LastAdvert[i] = 0; 
+        for (int i = 0; i < size; i++) {
+            LastAdvert[i] = 0;
         }
-    };
+    }
 
-    void ShowAdv();
+    virtual void ShowAdv();
 };
-// Определение подкласса ButtonStopAdv
+
 class ButtonStopAdv : public Advert {
 public:
-    // Конструктор производного класса с параметром
-    ButtonStopAdv(int size) : Advert(size) {} // Вызов конструктора базового класса с параметром
+    ButtonStopAdv(int size) : Advert(size) {}
 
-// Переопределение виртуальной функции
     int ChooseAdvert() override {
-        int baseChoice = Advert::ChooseAdvert(); // Вызов метода базового класса
+        int baseChoice = Advert::ChooseAdvert();
         if (baseChoice == 1) {
             std::cout << "Реклама была добавлена через производный класс." << std::endl;
         }
@@ -346,20 +308,14 @@ public:
         }
         return baseChoice;
     }
-    ButtonStopAdv& operator=(const ButtonStopAdv& other) {
-        if (this != &other) {
-            Advert::operator=(other); // Вызов оператора базового класса
-        }
-        return *this;
-    }
 
     void StopAdvs(int& StopAdv) {
         do {
             puts("Если хотите остановить видео, нажмите 1, иначе - 0");
             if (scanf("%d", &StopAdv) != 1) {
                 printf("Ошибка: введите числовое значение.\n");
-                while (getchar() != '\n'); 
-                StopAdv = -1; 
+                while (getchar() != '\n');
+                StopAdv = -1;
             }
             else if (StopAdv < 0 || StopAdv > 1) {
                 printf("Ошибка: Если хотите остановить рекламу, нажмите 1, иначе - 0.\n");
@@ -370,10 +326,11 @@ public:
             puts("Реклама остановлена");
         }
     }
+
     void OnAdv() {
-        int StopAdv = 0; 
+        int StopAdv = 0;
         while (true) {
-            StopAdvs(StopAdv); 
+            StopAdvs(StopAdv);
 
             if (StopAdv == 0) {
                 puts("Вы выбрали продолжить.");
@@ -388,10 +345,9 @@ public:
         }
     }
 };
+
 // Метод для выбора рандомной рекламы и её воспроизведения
 void Advert::ShowAdv() {
-    Advert* ad = new ButtonStopAdv(N); // Динамическое создание объекта производного класса
-    // Вызов метода, который использует виртуальную функцию
     int TurnOn = ChooseAdvert();
     NameAd();
     LastAdverts();
